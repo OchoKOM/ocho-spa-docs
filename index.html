@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon">
     <title>Documentation Ocho SPA</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -113,8 +114,12 @@
         <h3>Layouts Dynamiques</h3>
         <p>Exemple de structure de <span class="attribute">layout.php</span> :</p>
         <pre><code><span class="tag">&lt;<span class="tag-name">header</span>&gt;</span><span class="comment">&lt;!-- Navigation --&gt;</span><span class="tag">&lt;/<span class="tag-name">header</span>&gt;</span>
-<span class="tag">&lt;<span class="tag-name">main</span>&gt;</span><span class="key">&lt;?=</span> <span class="attribute">$content</span> <span class="key">?&gt;</span><span class="tag">&lt;/<span class="tag-name">main</span>&gt;</span>
-<span class="tag">&lt;<span class="tag-name">footer</span>&gt;</span><span class="comment">&lt;!-- Contenu global --&gt;</span><span class="tag">&lt;/<span class="tag-name">footer</span>&gt;</span></code></pre>
+<span class="tag">&lt;<span class="tag-name">main</span>&gt;</span>
+<span class="key">&lt;?php</span> 
+    <span class="tag">echo</span> <span class="attribute">$pageContent</span>; <span class="comment">/* La variable $pageContent affiche le contenu des page.php du repertoire courant et des sous répertoires qui n'ont pas de layout.php */</span> 
+<span class="key">?&gt;</span>
+<span class="tag">&lt;/<span class="tag-name">main</span>&gt;</span>
+<span class="tag">&lt;<span class="tag-name">footer</span>&gt;</span><span class="comment">&lt;!-- Pied de page --&gt;</span><span class="tag">&lt;/<span class="tag-name">footer</span>&gt;</span></code></pre>
     
         <h3>Gestion des Styles</h3>
         <ul>
@@ -171,35 +176,49 @@
     
     <h3>Chargement Dynamique avec Métadonnées</h3>
         <p>Exemple de script de chargement de page :</p>
-        <pre><code><span class="key">async</span> <span class="key">function</span> <span class="method">loadPage</span>(<span class="attribute">route</span>) {
-    <span class="key">try</span> {
-    <span class="key">const</span> <span class="attribute">response</span> = <span class="key">await</span> <span class="attribute">apiClient</span>.<span class="method">get</span>(<span class="value">`/api/get-page.php?route=<span class="attribute">${route}</span>`</span>);
-    
-    <span class="comment">// Mise à jour du contenu</span>
-    <span class="attribute">document</span>.<span class="method">getElementById</span>(<span class="value">"app"</span>).<span class="tag">innerHTML</span> = <span class="attribute">response</span>.<span class="tag">data</span>.<span class="tag">content</span>;
-    
-    <span class="comment">// Métadonnées</span>
-    <span class="attribute">document</span>.<span class="tag">title</span> = <span class="attribute">response</span>.<span class="tag">data</span>.<span class="tag">metadata</span>.<span class="tag">title</span>;
-    <span class="attribute">document</span>
-        .<span class="method">querySelector</span>(<span class="value">'meta[name="description"]'</span>)
-        .<span class="method">setAttribute</span>(<span class="value">"content"</span>, <span class="attribute">response</span>.<span class="tag">data</span>.<span class="tag">metadata</span>.<span class="tag">description</span>);
-
-    <span class="comment">// Gestion des styles</span>
-    <span class="attribute">document</span>
-        .<span class="method">querySelectorAll</span>(<span class="value">'link[data-dynamic-style]'</span>)
-        .<span class="method">forEach</span>(<span class="attribute">link</span> => <span class="attribute">link</span>.<span class="method">remove</span>());
-
-    <span class="attribute">response</span>.<span class="tag">data</span>.<span class="tag">styles</span>.<span class="method">forEach</span>((<span class="attribute">styleUrl</span>) => {
-        <span class="key">const</span> <span class="attribute">link</span> = <span class="attribute">document</span>.<span class="method">createElement</span>(<span class="value">'link'</span>);
-        <span class="attribute">link</span>.<span class="tag">rel</span> = <span class="value">"stylesheet"</span>;
-        <span class="attribute">link</span>.<span class="tag">href</span> = <span class="attribute">styleUrl</span>;
-        <span class="attribute">link</span>.<span class="method">setAttribute</span>(<span class="value">'data-dynamic-style'</span>, <span class="value">''</span>);
-        <span class="attribute">document</span>.<span class="tag">head</span>.<span class="method">appendChild</span>(<span class="attribute">link</span>);
+        <pre><code><span class="key">async</span> <span class="key">function</span> <span class="method">fetchPageContent</span>(<span class="attribute">route</span>) {
+    <span class="key">return</span> <span class="key">await</span> <span class="key">new</span> <span class="method">Promise</span>(<span class="key">async</span> (<span class="attribute">resolve</span>, <span class="attribute">reject</span>) => {
+        <span class="key">try</span> {
+            <span class="key">const</span> <span class="attribute">response</span> = <span class="key">await</span> <span class="attribute">apiClient</span>.<span class="method">get</span>(<span class="value">`/api/get-page.php?route=<span class="attribute">${route}</span>`</span>);
+            
+            <span class="comment">// Modifiez la partie de gestion des redirections :</span>
+            <span class="key">if</span> (<span class="attribute">response</span>.<span class="tag">status</span> >= <span class="value">300</span> && <span class="attribute">response</span>.<span class="tag">status</span> < <span class="value">400</span>) {
+                <span class="key">const</span> <span class="attribute">location</span> = <span class="attribute">response</span>.<span class="tag">headers</span>[<span class="value">'x-spa-redirect'</span>] || <span class="attribute">response</span>.<span class="tag">data</span>.<span class="tag">location</span>;
+                
+                <span class="key">if</span> (<span class="attribute">location</span>) {
+                <span class="method">navigate</span>(<span class="attribute">location</span>);
+                <span class="key">return</span>;
+                }
+                <span class="attribute">console</span>.<span class="method">error</span>(<span class="value">"Redirection error"</span>);
+                <span class="attribute">console</span>.<span class="method">log</span>(<span class="attribute">response</span>);
+                
+                <span class="method">resolve</span>({
+                <span class="tag">content</span>: <span class="value">`
+                    &lt;h1&gt;Erreur de redirection&lt;/h1&gt;
+                    &lt;p&gt;Voir la console pour plus de détails.&lt;/p&gt;
+                `</span>,
+                <span class="tag">metadata</span>: { <span class="tag">title</span>: <span class="value">"Erreur de chargement"</span> },
+                <span class="tag">styles</span>: [],
+                });
+            }
+            <span class="key">if</span> (!<span class="attribute">response</span>.<span class="tag">data</span>.<span class="tag">content</span>) {
+                <span class="attribute">console</span>.<span class="method">warn</span>(<span class="value">"The response is not valid data: \n"</span>, <span class="attribute">response</span>.<span class="tag">data</span>);
+                <span class="key">throw</span> <span class="key">new</span> <span class="method">Error</span>(<span class="value">"No valid data in the response."</span>);
+            }
+            <span class="method">resolve</span>(<span class="attribute">response</span>.<span class="tag">data</span>);
+        } <span class="key">catch</span> (<span class="attribute">error</span>) {
+            <span class="attribute">console</span>.<span class="method">error</span>(<span class="attribute">error</span>);
+            <span class="comment">// Mise à jour du DOM</span>
+            <span class="method">resolve</span>({
+                <span class="tag">content</span>: <span class="value">`
+                &lt;h1&gt;Erreur de chargement de la page&lt;/h1&gt;
+                &lt;p&gt;Voir la console pour plus de détails.&lt;/p&gt;
+                `</span>,
+                <span class="tag">metadata</span>: { <span class="tag">title</span>: <span class="value">"Erreur de chargement"</span> },
+                <span class="tag">styles</span>: [],
+            });
+        }
     });
-    } <span class="key">catch</span> (<span class="attribute">error</span>) {
-    <span class="attribute">console</span>.<span class="method">error</span>(<span class="value">'Erreur de chargement:'</span>, <span class="attribute">error</span>);
-    <span class="attribute">spa_redirect</span>(<span class="value">'/erreur'</span>);
-    }
 }</code></pre>
     
         
