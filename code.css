@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+
+.method {
+    color: #ff5722;
+}
+
+.string {
+    color: #e6db74;
+}
+
+.number {
+    color: red;
+}
+
+.comment {
+    color: grey;
+    font-style: italic;
+}
+
+.symbol {
+    color: #ce06ce;
+}
+
+.keymethod,
+.selector {
+    color: #f92672;
+}
+
+.identifier,
+.property {
+    color: cornflowerblue;
+}
+
+pre {
+    background: #2d2d2d;
+    color: #f8f8f2;
+    padding: 1em;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+code {
+    font-family: "Fira Code", 'Courier New', Courier, monospace;
+}
+
+.keyword {
+    color: #03a9f4;
+}
+
+.method {
+    color: #ff5722;
+}
+
+.tag {
+    color: #f92672;
+}
+
+.tag-name {
+    color: #66d9ef;
+}
+
+.identifier {
+    color: #a6e22e;
+}
+
+.value {
+    color: #e6db74;
+}
+
+.comment {
+    color: #75715e;
+}
