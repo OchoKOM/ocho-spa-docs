@@ -6,254 +6,460 @@
     <link rel="shortcut icon" href="favicon.svg" type="image/x-icon">
     <title>Documentation Ocho SPA</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="code.css">
 </head>
 <body>
     <div class="content">
         <h1>SPA avec API et Routage Dynamique</h1>
-        <span>Repo GitHub: <a href="https://github.com/OchoKOM/ocho-spa" class="value">https://github.com/OchoKOM/ocho-spa</a></span>
+        <span>Repo GitHub: <a href="https://github.com/OchoKOM/ocho-spa" class="string">https://github.com/OchoKOM/ocho-spa</a></span>
         <p>Ce projet est une application web monopage (SPA) utilisant PHP pour le backend et JavaScript pour le frontend. Il permet de charger dynamiquement des pages et de gérer les routes via une API.</p>
     
         <h2>Structure du Projet</h2>
-        <pre><code><span class="tag">root/</span>
-├─ <span class="attribute">.htaccess</span>                <span class="comment"># Configuration pour les URL propres</span>
-├─ <span class="tag">api/</span>
-│  ├─ <span class="attribute">get-page.php</span>          <span class="comment"># Gestionnaire de routes</span>
-│  ├─ <span class="attribute">json-response.php</span>     <span class="comment"># Helper pour réponses JSON</span>
-│  └─ <span class="attribute">spa-helpers.php</span>       <span class="comment"># Fonctions utilitaires pour la SPA</span>
-├─ <span class="tag">app/</span>
-│  ├─ <span class="tag">css/</span>
-│  │  └─ <span class="attribute">style.css</span>          <span class="comment"># Styles globaux</span>
-│  ├─ <span class="tag">js/</span>
-│  │  ├─ <span class="attribute">app.js</span>             <span class="comment"># Logique principale SPA</span>
-│  │  └─ <span class="attribute">ocho-api.js</span>        <span class="comment"># Client API avec gestion d'erreurs</span>
-│  └─ <span class="tag">uploads/</span>                    <span class="comment"># Stockage des fichiers</span>
-├─ <span class="attribute">index.php</span>                <span class="comment"># Point d'entrée principal</span>
-├─ <span class="tag">pages/</span>                         <span class="comment"># Contenu des pages</span>
-│  ├─ <span class="tag">about/</span>
-│  │  ├─ <span class="attribute">metadata.json</span>      <span class="comment"># Métadonnées spécifiques</span>
-│  │  └─ <span class="attribute">page.php</span>           <span class="comment"># Contenu HTML</span>
-│  ├─ <span class="tag">courses/</span>
-│  │  ├─ <span class="tag">dir/</span>
-│  │  │  ├─ <span class="tag">dir-1/</span>                <span class="comment"># Sous-répertoires</span>
-│  │  │  └─ <span class="tag">dir-2/</span>
-│  │  └─ <span class="attribute">page.php</span>
-│  ├─ <span class="attribute">layout.php</span>            <span class="comment"># Layout principal</span>
-│  ├─ <span class="attribute">page.php</span>              <span class="comment"># Layout par défaut</span>
-│  └─ <span class="comment">**other pages here**</span>    <span class="comment"># Ajoutez vos pages ici</span>
-└─ <span class="attribute">README.md</span>                <span class="comment"># Documentation</span></code></pre>
+        <pre><code><span class="tag-name">root/</span>
+    ├─ <span class="identifier">.htaccess</span>                <span class="comment"># Configuration Apache pour les URL propres</span>
+    ├─ <span class="identifier">router.php</span>               <span class="comment"># Routeur alternatif pour le serveur PHP intégré</span>
+    ├─ <span class="tag-name">api/</span>
+    │  ├─ <span class="identifier">get-page.php</span>          <span class="comment"># Gestionnaire de routes</span>
+    │  ├─ <span class="identifier">json-response.php</span>     <span class="comment"># Helper pour réponses JSON</span>
+    │  └─ <span class="identifier">spa-helpers.php</span>       <span class="comment"># Fonctions utilitaires pour la SPA</span>
+    ├─ <span class="tag-name">app/</span>
+    │  ├─ <span class="tag-name">css/</span>
+    │  │  └─ <span class="identifier">style.css</span>          <span class="comment"># Styles globaux</span>
+    │  ├─ <span class="tag-name">js/</span>
+    │  │  ├─ <span class="identifier">app.js</span>             <span class="comment"># Logique principale SPA</span>
+    │  │  └─ <span class="identifier">ocho-api.js</span>        <span class="comment"># Client API avec gestion d'erreurs</span>
+    │  └─ <span class="tag-name">uploads/</span>              <span class="comment"># Stockage des fichiers</span>
+    ├─ <span class="identifier">index.php</span>                <span class="comment"># Point d'entrée principal</span>
+    ├─ <span class="tag-name">pages/</span>                   <span class="comment"># Contenu des pages</span>
+    │  ├─ <span class="tag-name">about/</span>
+    │  │  ├─ <span class="identifier">metadata.json</span>      <span class="comment"># Métadonnées spécifiques</span>
+    │  │  └─ <span class="identifier">page.php</span>           <span class="comment"># Contenu HTML</span>
+    │  ├─ <span class="tag-name">courses/</span>
+    │  │  ├─ <span class="tag-name">dir/</span>
+    │  │  │  ├─ <span class="tag-name">dir-1/</span>          <span class="comment"># Sous-répertoires</span>
+    │  │  │  └─ <span class="tag-name">dir-2/</span>
+    │  │  └─ <span class="identifier">page.php</span>
+    │  ├─ <span class="identifier">layout.php</span>            <span class="comment"># Layout principal</span>
+    │  ├─ <span class="identifier">page.php</span>              <span class="comment"># Layout par défaut</span>
+    │  └─ <span class="comment">**other pages here**</span>  <span class="comment"># Ajoutez vos pages ici</span>
+    └─ <span class="identifier">README.md</span>                <span class="comment"># Documentation</span></code></pre>
     
         <h2>Détails des Fichiers</h2>
+
         <ul>
-            <li><strong><span class="attribute">.htaccess</span></strong> : Configure Apache pour rediriger les requêtes vers <span class="attribute">index.php</span> et gérer les URLs propres.</li>
-            <li><strong><span class="attribute">api/get-page.php</span></strong> : Script PHP pour résoudre les routes et renvoyer le contenu HTML des pages.</li>
-            <li><strong><span class="attribute">api/json-response.php</span></strong> : Fonction PHP pour envoyer des réponses au format JSON.</li>
-            <li><strong><span class="attribute">api/spa-helpers.php</span></strong> : Fonctions utilitaires pour la gestion des redirections et autres fonctionnalités SPA.</li>
-            <li><strong><span class="attribute">app/css/style.css</span></strong> : Fichier de style principal de l'application.</li>
-            <li><strong><span class="attribute">app/js/app.js</span></strong> : Script JavaScript pour gérer la navigation et le chargement dynamique des pages.</li>
-            <li><strong><span class="attribute">app/js/ocho-api.js</span></strong> : Classe JavaScript pour effectuer des requêtes HTTP vers l'API.</li>
-            <li><strong><span class="attribute">index.php</span></strong> : Point d'entrée principal de l'application, servant de layout pour la SPA.</li>
-            <li><strong><span class="tag">pages/</span></strong> : Répertoire contenant les pages de l'application, chaque page ayant son propre répertoire.</li>
+            <li><strong><span class="identifier">.htaccess</span></strong> : Configuration Apache pour rediriger les requêtes vers <span class="identifier">index.php</span>.<br>
+            <strong>Alternative</strong> : <span class="identifier">router.php</span> remplace cette fonctionnalité pour le serveur PHP intégré.</li>
+            
+            <li><strong><span class="identifier">router.php</span></strong> : Routeur PHP pour émuler le comportement d'<code>.htaccess</code> :
+                <ul>
+                    <li>Gère le routage SPA vers <code>index.php</code></li>
+                    <li>Sert les fichiers statiques (CSS/JS/images)</li>
+                    <li>Applique des extensions automatiques (<code>.php</code>, <code>.js</code>)</li>
+                    <li>Gère les erreurs personnalisées (403, 404, 500)</li>
+                </ul>
+            </li>
+            
+            <li><strong><span class="identifier">api/get-page.php</span></strong> : Script PHP pour résoudre les routes et renvoyer le contenu HTML des pages.</li>
+            <li><strong><span class="identifier">api/json-response.php</span></strong> : Fonction PHP pour envoyer des réponses au format JSON.</li>
+            <li><strong><span class="identifier">api/spa-helpers.php</span></strong> : Fonctions utilitaires pour la gestion des redirections SPA.</li>
+            <li><strong><span class="identifier">app/css/style.css</span></strong> : Fichier de style principal.</li>
+            <li><strong><span class="identifier">app/js/app.js</span></strong> : Script JavaScript pour la navigation dynamique.</li>
+            <li><strong><span class="identifier">app/js/ocho-api.js</span></strong> : Client HTTP avec gestion d'erreurs.</li>
+            <li><strong><span class="identifier">index.php</span></strong> : Point d'entrée principal de l'application.</li>
+            <li><strong><span class="identifier">pages/</span></strong> : Répertoire contenant toutes les pages de l'application.</li>
         </ul>
-    
         <h2>Fonctionnalités</h2>
+        <h3>Routage Multi-Environnement</h3>
         <ul>
-            <li><strong>Routage Dynamique</strong> : Résolution dynamique des routes via <span class="attribute">api/get-page.php</span>, avec chargement du contenu des pages en JavaScript.</li>
-            <li><strong>Navigation Historique</strong> : Utilisation de l'API History pour gérer la navigation avec le bouton précédent/suivant du navigateur.</li>
-            <li><strong>Réponses JSON</strong> : Les API retournent des réponses structurées au format JSON.</li>
-            <li><strong>Gestion des Redirections</strong> : Système de redirection intégré pour une navigation fluide sans rechargement de page.</li>
+            <li><strong>Apache</strong> : Utilisation de <code>.htaccess</code> en production</li>
+            <li><strong>Serveur PHP</strong> : Utilisation de <code>router.php</code> en développement</li>
+        </ul>
+        <pre><code><span class="keymethod">&lt;?php</span>
+<span class="comment">// Gestion des extensions automatiques</span>
+<span class="keyword">if</span> (<span class="method">file_exists</span>(<span class="identifier">$phpFile</span>)) {
+    <span class="method">include</span>(<span class="identifier">$phpFile</span>); <span class="comment">// Ex: /about → /about.php</span>
+}</code></pre>
+
+<h3>Fonctionnalités Principales</h3>
+        <ul>
+            <li><strong>Routage Dynamique</strong> via <span class="identifier">api/get-page.php</span></li>
+            <li><strong>Navigation Historique</strong> avec l'API History</li>
+            <li><strong>Réponses JSON Structurées</strong></li>
+            <li><strong>Système de Redirections Intelligentes</strong></li>
         </ul>
     
         <h2>Installation</h2>
         <ol>
             <li>Clonez le dépôt :
-                <pre><code><span class="tag">git</span> <span class="tag-name">clone</span> <span class="value">https://github.com/OchoKOM/ocho-spa</span></code></pre>
+                <pre><code><span class="keyword">git</span> <span class="tag">clone</span> <span class="string">https://github.com/OchoKOM/ocho-spa</span></code></pre>
             </li>
-            <li>Placez le projet dans votre serveur web (exemple : <span class="value">htdocs</span> pour XAMPP ou <span class="value">www</span> pour WAMP).</li>
-            <li>Assurez-vous que le module Apache <span class="attribute">mod_rewrite</span> est activé pour que <span class="attribute">.htaccess</span> fonctionne.</li>
-            <li>Configurez un VirtualHost (recommandé) pour pointer directement sur le répertoire du projet.</li>
-            <li>Accédez à l'application via votre navigateur à l'adresse <span class="value">http://localhost/</span> ou l'adresse de votre VirtualHost.</li>
+            <li>
+                <strong>Configuration</strong> :
+                <ul>
+                    <li>
+                        <h3>Avec apache</h3>
+                        <div>
+            <pre><code><span class="keyword">a2enmod</span> <span class="tag">rewrite</span> && <span class="tag">systemctl</span> restart apache2</code></pre>
+    
+            <h4>Configuration VirtualHost</h4>
+            <pre><code class="language-apache"><span class="vhost-tag">&lt;VirtualHost *<span class="identifier">:80</span>&gt;</span>
+    <span class="identifier">DocumentRoot</span> /chemin/vers/ocho-spa
+    <span class="identifier">ServerName</span>  localhost
+    <span class="vhost-tag">&lt;Directory <span class="string">"/chemin/vers/ocho-spa"</span>&gt;</span>
+        <span class="identifier">AllowOverride</span> All
+        <span class="identifier">Require</span> all granted
+    <span class="vhost-tag">&lt;/Directory&gt;</span>
+<span class="vhost-tag">&lt;/VirtualHost&gt;</span>
+</code></pre>
+                        </div>
+                    </li>
+                    <li>
+                        <h3>Avec des serveurs de developpement local (WAMP, XAMPP, etc.)</h3>
+                        <div>
+                            <ul>
+                                <li>Placez le projet dans votre serveur web (exemple : <span class="string">htdocs</span> pour XAMPP ou <span class="string">www</span> pour WAMP).</li>
+                                <li>Configurez un VirtualHost (recommandé) pour pointer directement sur le répertoire du projet.</li>
+                                <li>Accédez à l'application via votre navigateur à l'adresse <span class="string">http://localhost/</span> ou l'adresse de votre VirtualHost.</li>
+                            </ul>
+                            <div class="note">
+                                <strong>Note Importante :</strong> L'application nécessite une configuration racine (ex: <span class="string">http://localhost</span>).<br>
+                                Les sous-répertoires peuvent causer des problèmes de routage.
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <h3>Avec Serveur PHP Intégré</h3>
+                        <ul>
+                            <li>
+                                <div>Ouvrez le dossier du projet dans le terminal</div>
+                                <pre><code class="language-bash"><span class="keyword">cd</span> <span class="tag">ocho-spa</span></code></pre>
+                            </li>
+                            <li>
+                                <div>Servez le fichier <span class="identifier">router.php</span></div>
+                                <pre><code class="language-bash"><span class="keyword">php</span> <span class="property">-S</span> localhost:<span class="number">4000</span> router.php</code></pre>
+                            </li>
+
+                        </u>
+                    </li>
+                </ul>
+            </li>
         </ol>
-        <div class="note">
-            <strong>Note Importante :</strong> L'application nécessite une configuration racine (ex: <span class="value">http://localhost</span>).<br>
-            Les sous-répertoires peuvent causer des problèmes de routage.
+        <h2>Notes Techniques</h2>
+        <div class="technical-notes">
+            <table class="">
+                <thead>
+                    <tr>
+                        <th>Fonctionnalité</th>
+                        <th>Apache</th>
+                        <th>PHP Intégré</th>
+                        <th>Serveurs de développement local (WAMP, XAMPP, etc.)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Gestion des redirections</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Support des sous-répertoires</td>
+                        <td>✅</td>
+                        <td>⚠️ Limitée</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Performances</td>
+                        <td>✅ Optimisé</td>
+                        <td>⚠️ Développement</td>
+                        <td>⚠️ Dépendant de la configuration</td>
+                    </tr>
+                    <tr>
+                        <td>Interface</td>
+                        <td>🔧 Ligne de commande, Configuration manuelle</td>
+                        <td>🖥️ Sans interface (exécution CLI uniquement)</td>
+                        <td>🌐 Interface Web + Gestionnaire graphique</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+
         <h2>Utilisation</h2>
         <ul>
-            <li><strong>Pages</strong> : Ajoutez des dossiers dans <span class="tag">pages/</span> pour chaque page de l'application. Insérez-y un fichier <span class="attribute">page.php</span> ou <span class="attribute">layout.php</span> pour le contenu HTML.</li>
+            <li><strong>Pages</strong> : Ajoutez des dossiers dans <span class="identifier">pages/</span> pour chaque page de l'application. Insérez-y un fichier <span class="identifier">page.php</span> ou <span class="identifier">layout.php</span> pour le contenu HTML.</li>
             <li><strong>Navigation</strong> : Cliquez sur les liens pour naviguer. Les pages se chargeront dynamiquement sans rechargement complet.</li>
-            <li><strong>API</strong> : Les requêtes à l'API sont gérées par <span class="attribute">OchoClient</span> dans <span class="attribute">ocho-api.js</span>. Pour plus d'informations visiter le repo <a href="https://github.com/OchoKOM/xhr" class="value">https://github.com/OchoKOM/xhr</a></li>
+            <li><strong>API</strong> : Les requêtes à l'API sont gérées par <span class="identifier">OchoClient</span> dans <span class="identifier">ocho-api.js</span>. Pour plus d'informations visiter le repo <a href="https://github.com/OchoKOM/xhr" class="string">https://github.com/OchoKOM/xhr</a></li>
             <li><strong>Redirections</strong> : Utilisez la fonction <span class="tag-name">spa_redirect()</span> pour rediriger vers une autre route.</li>
         </ul>
-    
-        <h2>Exemple d'Utilisation de l'API</h2>
-        <pre><code><span class="key">import</span> { <span class="tag">apiClient</span> } <span class="key">from</span> <span class="value">"./app/js/ocho-api.js"</span>;
-    
-<span class="attribute">apiClient</span>
-    .<span class="method">get</span>(<span class="value">"api/get-page.php?route=about"</span>)
-    .<span class="method">then</span>((<span class="attribute">response</span>) => {
-    <span class="attribute">console</span>.<span class="method">log</span>(<span class="attribute">response</span>.<span class="tag">data</span>);
-    })
-    .<span class="method">catch</span>((<span class="attribute">error</span>) => {
-    <span class="attribute">console</span>.<span class="method">error</span>(<span class="attribute">error</span>);
-    });</code></pre>
-    
-        <h2>Fonctionnalités Clés</h2>
-        <h3>Système de Métadonnées Hiérarchique</h3>
-        <p>Chaque répertoire peut contenir un fichier <span class="attribute">metadata.json</span> :</p>
-        <pre><code>{
-    <span class="attribute">"title"</span>: <span class="value">"À Propos"</span>,
-    <span class="attribute">"description"</span>: <span class="value">"Page de présentation de l'entreprise"</span>,
-    <span class="attribute">"styles"</span>: [<span class="value">"/app/css/about.css"</span>]
-}</code></pre>
-    
+        <h2>Configurations</h2>
+        <h3>Structure des pages</h3>
         <ul>
-            <li>Les titres et descriptions sont hérités des répertoires parents.</li>
-            <li>Les styles sont cumulés du parent à l'enfant</li>
-        </ul>
-    
-        <h3>Layouts Dynamiques</h3>
-        <p>Exemple de structure de <span class="attribute">layout.php</span> :</p>
+            <li>
+                <strong>Ajout de pages</strong>
+                <div>Dans le repertoire <span class="identifier">pages/</span> vous ajoutez des repertoires qui contiendrons vos pages</div>
+                <strong class="identifier">Structure:</strong>
+                <pre><code><span class="tag-name">pages/</span> <span class="comment"># Accessible via le chemin / (la racine)</span>
+├─ <span class="identifier">metadata.json</span> <span class="comment"># Metadonnées par defaut</span>
+├─ <span class="identifier">page.php</span> <span class="comment"># Contenu principal</span>
+├─ <span class="identifier">layout.php</span> <span class="comment"># Layout par defaut</span>
+└─ <span class="tag-name">votre-repertoire/</span> <span class="comment"># Accessible via le chemin /votre-repertoire</span>
+   ├─ <span class="identifier">metadata.json</span> <span class="comment"># Metadonnées de la page</span>
+   ├─ <span class="identifier">page.php</span> <span class="comment"># Contenu HTML de la page</span>
+   ├─ <span class="identifier">layout.php</span> <span class="comment"># Layout de la page (optionnel)</span>
+   └─ <span class="tag-name">sous-dossier/</span>
+     └─ <span class="identifier">page.php</span> <span class="comment"># Les metadonnées et le layout du parent s'appliqueront ici aussi</code></>
+            </li>
+            <li>
+                <strong>Priorité des Fichiers</strong>
+                <ol>
+                    <li><span class="identifier">page.php</span> dans le répertoire courant</li>
+                    <li><span class="identifier">layout.php</span> dans le répertoire parent le plus proche</li>
+                    <li>Liste des sous-répertoires (si aucun fichier n'est trouvé)</li>
+                </ol>
+
+            </li>
+            <li>
+
+                    <strong>Layouts Dynamiques</strong>
+                    <div>Chaque répertoire peut contenir un fichier <span class="identifier">layout.php</span> avec cette structure :</div>
         <pre><code><span class="tag">&lt;<span class="tag-name">header</span>&gt;</span><span class="comment">&lt;!-- Navigation --&gt;</span><span class="tag">&lt;/<span class="tag-name">header</span>&gt;</span>
 <span class="tag">&lt;<span class="tag-name">main</span>&gt;</span>
-<span class="key">&lt;?php</span> 
-    <span class="tag">echo</span> <span class="attribute">$pageContent</span>; <span class="comment">/* La variable $pageContent affiche le contenu des page.php du repertoire courant et des sous répertoires qui n'ont pas de layout.php */</span> 
-<span class="key">?&gt;</span>
+<span class="keymethod">&lt;?php</span> 
+    <span class="keyword">echo</span> <span class="identifier">$pageContent</span>; <span class="comment">// Contenus des pages</span> 
+<span class="keymethod">?&gt;</span>
 <span class="tag">&lt;/<span class="tag-name">main</span>&gt;</span>
 <span class="tag">&lt;<span class="tag-name">footer</span>&gt;</span><span class="comment">&lt;!-- Pied de page --&gt;</span><span class="tag">&lt;/<span class="tag-name">footer</span>&gt;</span></code></pre>
-    
-        <h3>Gestion des Styles</h3>
-        <ul>
-            <li>Les feuilles de style sont chargées dynamiquement via les métadonnées.</li>
-            <li>Elles sont appliquées de manière hiérarchique (global → spécifique).</li>
-            <li>Les styles sont actualisés à chaque navigation.</li>
-        </ul>
-        <h4>Exemple de metadonnées avec style</h4>
-        <p>Placez le fichier <span class="attribute">metadata.json</span> dans le repertoire de votre page qui dois appliquer les style   :</p>
-        <pre><code>{
-    <span class="attribute">"title"</span>: <span class="value">"Styles"</span>,
-    <span class="attribute">"description"</span>: <span class="value">"Page avec style"</span>,
-    <span class="attribute">"styles"</span>: [<span class="value">"/chemin/vers/style.css"</span>, <span class="value">"/chemin/vers/style-2.css"</span>]
+                <ul>
+                    <li>La variable  <span class="identifier">$pageContent</span> affiche le contenu des <span class="identifier">page.php</span>  du repertoire courant et des sous répertoires qui n'ont pas de <span class="identifier">layout.php</span> </li>
+                </ul>
+            </li>
+            <li>
+
+                <strong>Système de Métadonnées Hiérarchique</strong>
+                <div>Chaque répertoire peut contenir un fichier <span class="identifier">metadata.json</span> avec cette structure:</div>
+                <div>
+                    <pre><code>{
+    <span class="identifier">"title"</span>: <span class="string">"Titre de la page"</span>,
+    <span class="identifier">"description"</span>: <span class="string">"Meta description"</span>,
+    <span class="identifier">"styles"</span>: [<span class="string">"/chemin/vers/style.css"</span>, <span class="string">"/chemin/vers/style-2.css"</span>]
 }</code></pre>
-        <h3>API integrée</h3>
-        <p>Exemple de reponse json de l'API géré par <span class="key">apiClient</span> :</p>
-        <pre><code>{
-    <span class="attribute">"content"</span>: <span class="value">"&lt;h1&gt;Bienvenue&lt;/h1&gt;"</span>,
-    <span class="attribute">"metadata"</span>: {
-    <span class="attribute">"title"</span>: <span class="value">"Styles"</span>,
-    <span class="attribute">"description"</span>: <span class="value">"Page avec style"</span>,
-    },
-    <span class="attribute">"styles"</span>: [<span class="value">"/chemin/vers/style.css"</span>, <span class="value">"/chemin/vers/style-2.css"</span>]
+                </div>
+            
+                <ul>
+                    <li>Les titres et descriptions sont hérités des répertoires parents.</li>
+                    <li>
+                        <strong>Gestion des Styles</strong>
+                        <ul>
+                            <li>Les feuilles de style sont chargées dynamiquement via les métadonnées.</li>
+                            <li>Elles sont appliquées de manière hiérarchique (global → spécifique).</li>
+                            <li>Les styles sont actualisés à chaque navigation.</li>
+                        </ul>
+                        <div>Placez le fichier <span class="identifier">metadata.json</span> dans le repertoire de votre page qui dois appliquer les style   :</d>
+                        <pre><code>{
+    <span class="identifier">"title"</span>: <span class="string">"Styles"</span>,
+    <span class="identifier">"description"</span>: <span class="string">"Page avec style"</span>,
+    <span class="identifier">"styles"</span>: [<span class="string">"/chemin/vers/style.css"</span>, <span class="string">"/chemin/vers/style-2.css"</span>]
 }</code></pre>
-        <ul>
-            <li><strong>Contenu final (converti par apiClient)</strong> : 
-            <p>Vous pouvez gerer cette reponse selon votre propre logique.</p>
-            <pre><code>{
-    <span class="attribute">data</span>: {
-    <span class="attribute">content</span>: <span class="value">"&lt;h1&gt;Bienvenue&lt;/h1&gt;"</span>,
-    <span class="attribute">metadata</span>: {
-        <span class="attribute">title</span>: <span class="value">"Accueil"</span>,
-        <span class="attribute">description</span>: <span class="value">"Site de démonstration"</span>
-    },
-    <span class="attribute">styles</span>: [
-        <span class="value">"/app/css/style.css"</span>
-    ]
-    },
-    <span class="attribute">status</span>: <span class="value">200</span>,
-    <span class="attribute">statusText</span>: <span class="value">"OK"</span>,
-    <span class="attribute">headers</span>: {
-    <span class="attribute">"header-1"</span>: <span class="value">"Header-1-value"</span>,
-    }
-}</code></pre>
+                </li>
+                </ul>
             </li>
         </ul>
-        <h3>Gestion des Redirections</h3>
-        <p>Exemple de redirection dans un fichier <span class="attribute">page.php</span> ou <span class="attribute">layout.php</span> :</p>
-        <pre><code><span class="tag">&lt;?php</span>
-<span class="key">if</span> (!<span class="method">user_is_logged_in</span>()) {
-    <span class="method">spa_redirect</span>(<span class="value">'/login'</span>);
+        <div class="advanced-usage">
+            <h3>Gestion des Redirections</h3>
+            <p>Exemple de redirection dans un fichier <span class="identifier">page.php</span> ou <span class="identifier">layout.php</span> :</p>
+        <pre><code><span class="keymethod">&lt;?php</span>
+<span class="key">if</span> (!<span class="method">user_is_logged_in</span>()) { <span class="comment">// Votre condition de redirection</span>
+    <span class="method">spa_redirect</span>(<span class="string">'/login'</span>); <span class="comment">// Redirection vers la page de login</span>
 }</code></pre>
-
-    
-    <h3>Chargement Dynamique avec Métadonnées</h3>
-        <p>Exemple de script de chargement de page :</p>
-        <pre><code><span class="key">async</span> <span class="key">function</span> <span class="method">fetchPageContent</span>(<span class="attribute">route</span>) {
-    <span class="key">return</span> <span class="key">await</span> <span class="key">new</span> <span class="method">Promise</span>(<span class="key">async</span> (<span class="attribute">resolve</span>, <span class="attribute">reject</span>) => {
-        <span class="key">try</span> {
-            <span class="key">const</span> <span class="attribute">response</span> = <span class="key">await</span> <span class="attribute">apiClient</span>.<span class="method">get</span>(<span class="value">`/api/get-page.php?route=<span class="attribute">${route}</span>`</span>);
+    </div>
+            <h3>Chargement Dynamique avec API</h3>
             
-            <span class="comment">// Modifiez la partie de gestion des redirections :</span>
-            <span class="key">if</span> (<span class="attribute">response</span>.<span class="tag">status</span> >= <span class="value">300</span> && <span class="attribute">response</span>.<span class="tag">status</span> < <span class="value">400</span>) {
-                <span class="key">const</span> <span class="attribute">location</span> = <span class="attribute">response</span>.<span class="tag">headers</span>[<span class="value">'x-spa-redirect'</span>] || <span class="attribute">response</span>.<span class="tag">data</span>.<span class="tag">location</span>;
-                
-                <span class="key">if</span> (<span class="attribute">location</span>) {
-                <span class="method">navigate</span>(<span class="attribute">location</span>);
-                <span class="key">return</span>;
-                }
-                <span class="attribute">console</span>.<span class="method">error</span>(<span class="value">"Redirection error"</span>);
-                <span class="attribute">console</span>.<span class="method">log</span>(<span class="attribute">response</span>);
-                
-                <span class="method">resolve</span>({
-                <span class="tag">content</span>: <span class="value">`
-                    &lt;h1&gt;Erreur de redirection&lt;/h1&gt;
-                    &lt;p&gt;Voir la console pour plus de détails.&lt;/p&gt;
-                `</span>,
-                <span class="tag">metadata</span>: { <span class="tag">title</span>: <span class="value">"Erreur de chargement"</span> },
-                <span class="tag">styles</span>: [],
-                });
-            }
-            <span class="key">if</span> (!<span class="attribute">response</span>.<span class="tag">data</span>.<span class="tag">content</span>) {
-                <span class="attribute">console</span>.<span class="method">warn</span>(<span class="value">"The response is not valid data: \n"</span>, <span class="attribute">response</span>.<span class="tag">data</span>);
-                <span class="key">throw</span> <span class="key">new</span> <span class="method">Error</span>(<span class="value">"No valid data in the response."</span>);
-            }
-            <span class="method">resolve</span>(<span class="attribute">response</span>.<span class="tag">data</span>);
-        } <span class="key">catch</span> (<span class="attribute">error</span>) {
-            <span class="attribute">console</span>.<span class="method">error</span>(<span class="attribute">error</span>);
-            <span class="comment">// Mise à jour du DOM</span>
-            <span class="method">resolve</span>({
-                <span class="tag">content</span>: <span class="value">`
-                &lt;h1&gt;Erreur de chargement de la page&lt;/h1&gt;
-                &lt;p&gt;Voir la console pour plus de détails.&lt;/p&gt;
-                `</span>,
-                <span class="tag">metadata</span>: { <span class="tag">title</span>: <span class="value">"Erreur de chargement"</span> },
-                <span class="tag">styles</span>: [],
-            });
+        <h4>Réponses JSON de <span class="identifier">get-page.php</span></h4>
+        <div>Vous pouvez gérer cette répose qvec votre propre logique ou utiliser <span class="key">apiClient</span> comme expliqué plus bas</div>
+        <pre><code>{
+    <span class="identifier">"content"</span>: <span class="string">"&lt;h1&gt;Bienvenue&lt;/h1&gt;"</span>,
+    <span class="identifier">"metadata"</span>: {
+    <span class="identifier">"title"</span>: <span class="string">"Styles"</span>,
+    <span class="identifier">"description"</span>: <span class="string">"Page avec style"</span>,
+    },
+    <span class="identifier">"styles"</span>: [<span class="string">"/chemin/vers/style.css"</span>, <span class="string">"/chemin/vers/style-2.css"</span>]
+}</code></pre>
+<strong>Utilisation de apiClient:</strong>
+<div>Importez <span class="identifier">apiClient</span> depuis <span class="identifier">ocho-api.js</span> :</div>
+<pre><code><span class="keyword">import</span> { <span class="keymethod">apiClient</span> } <span class="keyword">from</span> <span class="string">"/app/js/ocho-api.js"</span>;</code></pre>
+            <ul>
+                <li>
+                    <strong>Methode 1:</strong>
+                    <div>
+                        <pre><code><span class="identifier">apiClient</span>
+    .<span class="method">get</span>(<span class="string">`/api/get-page?route=/path/to/page`</span>)
+    .<span class="method">then</span>((<span class="identifier">response</span>) =&gt; {
+        <span class="identifier">console</span>.<span class="method">log</span>(<span class="identifier">response</span>); <span class="comment">// Reponse de l'api</span>
+    })</code></pre>
+                    </div>
+                </li>
+                <li>
+                    <strong>Methode 2:</strong>
+                    <div>
+                        <pre><code><span class="keyword">const</span> <span class="identifier">response</span> = <span class="keyword">await</span> <span class="identifier">apiClient</span>.<span class="method">get</span>(<span class="string">`/api/get-page.php?route=/path/to/page`</span>);
+
+<span class="identifier">console</span>.<span class="method">log</span>(<span class="identifier">response</span>); <span class="comment">// Reponse de l'api</span> </code></pre>
+                    </div>
+                </li>
+            </ul>
+            <strong>Structure de la reponse <span class="identifier">apiClient</span>: </strong>
+            <pre><code>{
+    <span class="keymethod">data</span>: {
+        <span class="keymethod">content</span>: <span class="string">"&lt;h1&gt;Contenu de votre page&lt;/h1&gt;"</span>,
+        <span class="keymethod">metadata</span>: {
+            <span class="keymethod">title</span>: <span class="string">"Titre de page"</span>,
+            <span class="keymethod">description</span>: <span class="string">"Contenu de metadescription"</span>
+        },
+        <span class="keymethod">styles</span>: [
+            <span class="string">"/chemin/vers/style-1.css"</span>,
+            <span class="string">"/chemin/vers/style-2.css"</span>,
+        ]
+    },
+    <span class="keymethod">status</span>: <span class="string">200</span>,
+    <span class="keymethod">statusText</span>: <span class="string">"OK"</span>,
+    <span class="keymethod">headers</span>: {
+        <span class="string">"X-header-1"</span>: <span class="string">"Header-1-string"</span>,
+        <span class="string">"X-header-2"</span>: <span class="string">"Header-2-string"</span>,
+    }
+}</code></pre>
+Vous pouvez adapter selon votre propre logique ou suivre les instructions plus bas: 
+<ul>
+    <li>
+        <div>
+            <div><strong>Navigation:</strong> utilisez cette fonction pour gérer la navigation dynamique.</div>
+    <pre>
+<code><span class="keyword">async</span> <span class="keyword">function</span> <span class="method">navigate</span>(<span class="identifier">route</span>) {
+    <span class="keyword">const</span> <span class="identifier">destination</span> = <span class="string">`${route}`</span>;
+    <span class="keyword">const</span> <span class="identifier">response</span> = <span class="keyword">await</span> <span class="method">fetchPageContent</span>(<span class="identifier">destination</span>);
+    
+    
+    <span class="comment">// Mettre a jour le contenu de la page</span>
+    <span class="identifier">document</span>.<span class="method">getElementById</span>(<span class="string">"app"</span>).<span class="keymethod">innerHTML</span> = <span class="identifier">response</span>.<span class="keymethod">content</span>;
+    
+    
+    <span class="comment">// Mettre a jour les metadonnées</span>
+    <span class="identifier">document</span>.<span class="keymethod">title</span> = <span class="identifier">response</span>.<span class="keymethod">metadata</span>.<span class="keymethod">title</span> || <span class="string">"Title"</span>;
+    <span class="keyword">const</span> <span class="identifier">metaDescription</span> = <span class="identifier">document</span>.<span class="method">querySelector</span>(<span class="string">'meta[name="description"]'</span>);
+    <span class="keyword">if</span> (<span class="identifier">metaDescription</span>) {
+        <span class="identifier">metaDescription</span>.<span class="keymethod">content</span> = <span class="identifier">response</span>.<span class="keymethod">metadata</span>.<span class="keymethod">description</span> || <span class="string">""</span>;
+    }
+    
+    <span class="comment">Mettre à jour les styles</span>
+    <span class="keyword">const</span> <span class="identifier">exclusionList</span> = [];
+    <span class="keyword">const</span> <span class="identifier">newStyles</span> = <span class="identifier">response</span>.<span class="keymethod">styles</span> ?? [];
+    
+    <span class="keyword">const</span> <span class="identifier">existingStyles</span> = <span class="identifier">document</span>.<span class="method">querySelectorAll</span>(<span class="string">"link[data-dynamic-css]"</span>);
+    <span class="identifier">existingStyles</span>.<span class="method">forEach</span>((<span class="identifier">style</span>) =&gt; {
+        <span class="keyword">const</span> <span class="identifier">sameHref</span> = <span class="identifier">newStyles</span>.<span class="method">some</span>((<span class="identifier">s</span>) =&gt; <span class="identifier">s</span> === <span class="identifier">style</span>.<span class="method">getAttribute</span>(<span class="string">"href"</span>));
+
+        <span class="identifier">sameHref</span> &amp;&amp; <span class="identifier">exclusionList</span>.<span class="method">push</span>(<span class="identifier">style</span>.<span class="method">getAttribute</span>(<span class="string">"href"</span>));
+        !<span class="identifier">sameHref</span> &amp;&amp; <span class="identifier">style</span>.<span class="method">remove</span>();
+    });
+    
+    
+    <span class="identifier">newStyles</span>.<span class="method">forEach</span>((<span class="identifier">styleUrl</span>) =&gt; {
+        <span class="keyword">if</span> (!<span class="identifier">exclusionList</span>.<span class="method">includes</span>(<span class="identifier">styleUrl</span>)) {
+            <span class="keyword">const</span> <span class="identifier">link</span> = <span class="identifier">document</span>.<span class="method">createElement</span>(<span class="string">"link"</span>);
+            <span class="identifier">link</span>.<span class="keymethod">rel</span> = <span class="string">"stylesheet"</span>;
+
+            <span class="identifier">link</span>.<span class="keymethod">href</span> = <span class="identifier">styleUrl</span>;
+
+            <span class="identifier">link</span>.<span class="method">setAttribute</span>(<span class="string">"data-dynamic-css"</span>, <span class="string">"true"</span>);
+
+            <span class="identifier">document</span>.<span class="keymethod">head</span>.<span class="method">appendChild</span>(<span class="identifier">link</span>);
         }
     });
-}</code></pre>
     
+    
+    <span class="identifier">history</span>.<span class="method">pushState</span>({<span class="keymethod"> route </span>}, <span class="string">""</span>, <span class="identifier">destination</span>);
+}</code>
+    </pre>
+        </div>
+    </li>
+    <li>
+        <div><strong>Contenu de pages et rédirections:</strong> utilisez cette fonction </div>
         
+<div>
+    <pre>
+<code><span class="keyword">async</span> <span class="keyword">function</span> <span class="method">fetchPageContent</span>(<span class="identifier">route</span>) {
+    <span class="keyword">return</span> <span class="keyword">await</span> <span class="keyword">new</span> <span class="method">Promise</span>(<span class="keyword">async</span> (<span class="identifier">resolve</span>) =&gt; {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> <span class="identifier">response</span> = <span class="keyword">await</span> <span class="identifier">apiClient</span>.<span class="method">get</span>(<span class="string">`./api/get-page?route=${route}`</span>);
+    
+       <span class="comment">// Modifiez la partie de gestion des redirections :</span>
+       <span class="keyword">if</span> (<span class="identifier">response</span>.<span class="keymethod">status</span> &gt;= <span class="number">300</span> &amp;&amp; <span class="identifier">response</span>.<span class="keymethod">status</span> &lt; <span class="number">400</span>) {
+            <span class="keyword">const</span> <span class="identifier">location</span> = <span class="identifier">response</span>.<span class="keymethod">headers</span>[<span class="string">"x-spa-redirect"</span>] || <span class="identifier">response</span>.<span class="keymethod">data</span>.<span class="keymethod">location</span>;
+    
+    
+        <span class="keyword">if</span> (<span class="identifier">location</span>) {
+            <span class="method">navigate</span>(<span class="identifier">location</span>);
+            <span class="keyword">return</span>;
+        }
+
+        <span class="identifier">console</span>.<span class="method">error</span>(<span class="string">"Redirection error"</span>);
+        <span class="identifier">console</span>.<span class="method">log</span>(<span class="identifier">response</span>);
+    
+    
+        <span class="method">resolve</span>({<span class="keymethod">
+            content</span>: <span class="string">`
+            &lt;h1&gt;Erreur de redirection&lt;/h1&gt;
+            &lt;p&gt;Voir la console pour plus de détails.&lt;/p&gt;
+            `</span>,<span class="keymethod">
+            metadata</span>: {<span class="keymethod"> title</span>: <span class="string">"Erreur de chargement"</span> },<span class="keymethod">
+            styles</span>: [],
+        });
+       }
+        <span class="keyword">if</span> (!<span class="identifier">response</span>.<span class="keymethod">data</span>.<span class="keymethod">content</span>) {
+                <span class="identifier">console</span>.<span class="method">warn</span>(<span class="string">"The response is not valid data: \n"</span>, <span class="identifier">response</span>.<span class="keymethod">data</span>);
+                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="method">Error</span>(<span class="string">"No valid data in the response."</span>);
+        }
+        <span class="method">resolve</span>(<span class="identifier">response</span>.<span class="keymethod">data</span>);
+    } <span class="keyword">catch</span> (<span class="identifier">error</span>) {
+       <span class="identifier">console</span>.<span class="method">error</span>(<span class="identifier">error</span>);
+       <span class="comment">// Mise à jour du DOM</span>
+       <span class="method">resolve</span>({<span class="keymethod">
+            content</span>: <span class="string">`
+            &lt;h1&gt;Erreur de chargement de la page&lt;/h1&gt;
+            &lt;p&gt;Voir la console pour plus de détails.&lt;/p&gt; `</span>,
+            <span class="keymethod">
+            metadata</span>: {<span class="keymethod"> title</span>: <span class="string">"Erreur de chargement"</span> },<span class="keymethod">
+            styles</span>: [],
+        });
+    }
+}</code>
+    </pre>
+</div>
+    </li>
+</ul>
     <h2>Configuration Avancée</h2>
-        <pre><code><span class="attribute">RewriteEngine</span> <span class="value">On</span>
+        <pre><code><span class="identifier">RewriteEngine</span> <span class="string">On</span>
     
 <span class="comment"># Exclusion des assets et API</span>
-<span class="attribute">RewriteCond</span> <span class="value">%{REQUEST_URI}</span> !^/api/ [NC]
-<span class="attribute">RewriteCond</span> <span class="value">%{REQUEST_URI}</span> !^/app/ [NC]
-<span class="attribute">RewriteCond</span> <span class="value">%{REQUEST_FILENAME}</span> !-f
-<span class="attribute">RewriteCond</span> <span class="value">%{REQUEST_FILENAME}</span> !-d
-<span class="attribute">RewriteRule</span> ^ index.php [L]</code></pre>
-        <h3>Priorité des Fichiers</h3>
-        <ol>
-            <li><span class="attribute">page.php</span> dans le répertoire courant</li>
-            <li><span class="attribute">layout.php</span> dans le répertoire parent le plus proche</li>
-            <li>Liste des sous-répertoires (si aucun fichier n'est trouvé)</li>
-        </ol>
-    
+<span class="identifier">RewriteCond</span> <span class="string">%{REQUEST_URI}</span> !^/api/ [NC]
+<span class="identifier">RewriteCond</span> <span class="string">%{REQUEST_URI}</span> !^/app/ [NC]
+<span class="identifier">RewriteCond</span> <span class="string">%{REQUEST_FILENAME}</span> !-f
+<span class="identifier">RewriteCond</span> <span class="string">%{REQUEST_FILENAME}</span> !-d
+<span class="identifier">RewriteRule</span> ^ index.php [L]</code></pre>
         <h2>Bonnes Pratiques</h2>
         <ul>
             <li>Organiser les styles par fonctionnalité</li>
             <li>Utiliser les métadonnées pour améliorer le SEO</li>
             <li>Structurer les layouts de manière modulaire</li>
             <li>Valider les fichiers JSON avec :
-                <pre><code><span class="tag">php</span> -l <span class="attribute">metadata.json</span></code></pre>
+                <pre><code><span class="keyword">php</span> <span class="property">-l</span> metadata.json</code></pre>
             </li>
         </ul>
     
         <h2>Contribuer</h2>
-        <p>Les contributions sont les bienvenues. Ouvrez une <span class="attribute">pull request</span> ou une <span class="attribute">issue</span> pour discuter des modifications.</p>
+        <p>Les contributions sont les bienvenues. Ouvrez une <span class="identifier">pull request</span> ou une <span class="identifier">issue</span> pour discuter des modifications.</p>
     
         <h2>Licence</h2>
-        <p>Ce projet est sous licence <span class="attribute">MIT</span>. Consultez le fichier <span class="attribute">LICENSE</span> pour les détails.</p>
-    </div>
+        <p>Ce projet est sous licence <span class="identifier">MIT</span>. Consultez le fichier <span class="identifier">LICENSE</span> pour les détails.</p>
     </div>
     <script>
         if (navigator.language.split('-')[0].toLowerCase() !== 'fr') {

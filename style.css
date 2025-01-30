@@ -8,6 +8,46 @@ body {
 .content {
   text-align: initial;
 }
+.technical-notes{
+  max-width: 100%;
+  overflow: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  text-align: left;
+  overflow: hidden;
+}
+
+table thead {
+  background: #3849637c;
+  color: white;
+}
+
+table th, 
+table td {
+  padding: 12px 15px;
+  border: 1px solid #808080;
+}
+
+table tbody tr:nth-child(even) {
+  background: #38496328;
+}
+
+table tbody tr:hover {
+  background: #384963c5;
+}
+
+table td {
+  font-weight: 500;
+}
+
+table td:first-child {
+  font-weight: bold;
+  color: #f7f7f7;
+}
 
 pre {
   background: #2d2d2d;

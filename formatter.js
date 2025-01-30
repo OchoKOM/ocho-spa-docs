@@ -125,7 +125,7 @@ function jsRules(text) {
         /\b(function|if|else|return|let|const|var|async|await|new|try|catch|throw|class|extends|static|import|export|from)\b/g,
       className: "keyword",
     },
-    { regex: /"(.*?)"|'(.*?)'/g, className: "string" },
+    { regex: /"(.*?)"|'(.*?)'|`([\s\S]*?)`/g, className: "string" },
     { regex: /(\/\/.*?$|\/\*[\s\S]*?\*\/)/gm, className: "comment" },
     { regex: /\b\d+(\.\d+)?\b/g, className: "number" },
     { regex: /\b([a-zA-Z_]\w*)\s*(?=\()/g, className: "method" },
@@ -296,7 +296,7 @@ const languageIdentifiers = {
       { regex: /\$\w+/i, score: 3 }, // Variables PHP
     ],
     penalties: [
-      { regex: /\b(const|var|let|=>)\b/, score: 3 }, // JS mots-clés
+      { regex: /\b(const|var|let|=>)\b/, score: 5 }, // JS mots-clés
       // { regex: /<([\w-]+)(\s+[\w-]+=("|')[^"]*("|'))*>/i, score: 2 }, // HTML balises
       { regex: /<\/?IfModule>/i, score: 1 }, // Règles Apache (htaccess)
     ],
@@ -344,7 +344,7 @@ const languageIdentifiers = {
       {
         regex:
           /^\s*(RewriteEngine|RewriteRule|ErrorDocument|RewriteCond|Redirect|AddHandler|Options|SetEnv)\b/m,
-        score: 5,
+        score: 15,
       }, // Mots-clés Apache
       { regex: /\%{\s*[\w-]+\s*}/, score: 3 }, // Variables Apache
       { regex: /<\/?IfModule>/i, score: 2 }, // Bloc IfModule
@@ -369,6 +369,11 @@ const languageIdentifiers = {
       { regex: /<\/?[\w-]+>/, score: 3 }, // HTML balises
       { regex: /([{\[])\s*("[\w$]+":)/, score: 5 },
       { regex: /^\{.*\}$/s, score: 15 },
+      {
+        regex:
+          /^\s*(RewriteEngine|RewriteRule|ErrorDocument|RewriteCond|Redirect|AddHandler|Options|SetEnv)\b/m,
+        score: 15,
+      }, // Mots-clés Apache
     ],
     minScore: 5,
   },
@@ -377,7 +382,7 @@ const languageIdentifiers = {
       {
         regex:
           /\b(function|const|var|let|=>|console\.log|import|export|async|await)\b/,
-        score: 10,
+        score: 15,
       }, // JS mots-clés
       { regex: /(\/\/.*|\/\*[\s\S]*?\*\/)/, score: 3 }, // Commentaires JS
       { regex: /\b(\d+|\w+\s*\([\w\s,]*\))/, score: 2 }, // Fonctions/expressions JS
@@ -389,7 +394,7 @@ const languageIdentifiers = {
     penalties: [
       { regex: /^\s*[[{]\s*("[\w$]+":)/, score: 15 }, // JSON
       { regex: /<\/?[\w-]+>/, score: 5 }, // HTML balises
-      { regex: /<\?(?:php|=|xml|=)?/i, score: 5 }, // Balises PHP
+      { regex: /<\?(?:php|=|xml|=)?/i, score: 3 }, // Balises PHP
       { regex: /([^{}]+\{[^}]*\})/gs, score: 4 }, // Pénalité pour les blocs CSS
     ],
     minScore: 6,
@@ -433,7 +438,7 @@ function detectLanguage(code) {
 
     scores[lang] = score >= config.minScore ? score : 0;
   }
-  console.log(scores);
+console.log(scores);
 
   const detectedLanguage = Object.entries(scores)
     .filter(([_, score]) => score > 0)
@@ -458,7 +463,6 @@ function removeContext(code) {
 
 function highlightSyntax(carret = true) {
   const editor = document.getElementById("editor");
-  console.log(editor.innerText.length);
 
   const filenameInput = document.getElementById("filenameInput"); // Assuming filename input element is present
 
@@ -477,6 +481,7 @@ function highlightSyntax(carret = true) {
       Object.keys(languageIdentifiers).find((lang) => lang === fileExtension) ??
       detectLanguage(code);
     const highlightedCode = syntaxHighlight(code, detectedLanguage);
+    
     editor.innerHTML = highlightedCode;
     restoreCaretPosition(editor, caretPos);
   }
@@ -489,36 +494,62 @@ function saveCaretPosition(editableDiv) {
 
   const range = selection.getRangeAt(0);
   const preCaretRange = range.cloneRange();
+  
+  // Créer un marqueur temporaire pour capturer la position exacte
+  const tempSpan = document.createElement('span');
+  tempSpan.textContent = '\u200B'; // Caractère zéro-width
+  range.insertNode(tempSpan);
+  
+  // Calculer l'offset avant le marqueur
   preCaretRange.selectNodeContents(editableDiv);
-  preCaretRange.setEnd(range.startContainer, range.startOffset);
+  preCaretRange.setEndBefore(tempSpan);
+  const offset = preCaretRange.toString().length;
 
-  return preCaretRange.toString().length; // Longueur du texte avant le caret
+  // Nettoyer le marqueur
+  tempSpan.parentNode.removeChild(tempSpan);
+
+  return offset;
 }
 
 function restoreCaretPosition(editableDiv, offset) {
-    console.log(editableDiv.innerText.split("\n"));
-    
   const selection = window.getSelection();
   const range = document.createRange();
-  let charCount = 0,
-    nodeStack = [editableDiv],
-    node;
+  let charCount = 0;
+  let found = false;
 
-  while ((node = nodeStack.pop())) {
-    if (node.nodeType === 3) {
-      // Noeud texte
-      let nextCharCount = charCount + node.length;
-      if (nextCharCount >= offset) {
-        range.setStart(node, offset - charCount);
-        range.collapse(true);
-        break;
+  const walker = document.createTreeWalker(
+    editableDiv,
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+
+  let currentNode;
+  while ((currentNode = walker.nextNode()) && !found) {
+    const nodeText = currentNode.textContent;
+    const nodeLength = nodeText.length;
+    
+    if (charCount + nodeLength >= offset) {
+      const offsetInNode = offset - charCount;
+      let position = offsetInNode;
+
+      // Ajustement pour les \n
+      if (nodeText[offsetInNode] === '\n') {
+        position = offsetInNode + 1; // Place APRÈS le \n
+      } else if (nodeText[offsetInNode - 1] === '\n') {
+        position = offsetInNode; // Conserve position actuelle
       }
-      charCount = nextCharCount;
-    } else {
-      for (let i = node.childNodes.length - 1; i >= 0; i--) {
-        nodeStack.push(node.childNodes[i]);
-      }
+
+      range.setStart(currentNode, Math.min(position, nodeLength));
+      range.collapse(true);
+      found = true;
     }
+    charCount += nodeLength;
+  }
+
+  if (!found) {
+    range.selectNodeContents(editableDiv);
+    range.collapse(false);
   }
 
   selection.removeAllRanges();
