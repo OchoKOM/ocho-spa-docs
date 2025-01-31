@@ -264,14 +264,6 @@
                 </ul>
             </li>
         </ul>
-        <div class="advanced-usage">
-            <h3>Gestion des Redirections</h3>
-            <p>Exemple de redirection dans un fichier <span class="identifier">page.php</span> ou <span class="identifier">layout.php</span> :</p>
-        <pre><code><span class="keymethod">&lt;?php</span>
-<span class="key">if</span> (!<span class="method">user_is_logged_in</span>()) { <span class="comment">// Votre condition de redirection</span>
-    <span class="method">spa_redirect</span>(<span class="string">'/login'</span>); <span class="comment">// Redirection vers la page de login</span>
-}</code></pre>
-    </div>
             <h3>Chargement Dynamique avec API</h3>
             
         <h4>Réponses JSON de <span class="identifier">get-page.php</span></h4>
@@ -284,7 +276,27 @@
     },
     <span class="identifier">"styles"</span>: [<span class="string">"/chemin/vers/style.css"</span>, <span class="string">"/chemin/vers/style-2.css"</span>]
 }</code></pre>
-<strong>Utilisation de apiClient:</strong>
+<div class="advanced-usage">
+    <h4>Gestion de la redirection</h4>
+    <p>Exemple de redirection dans un fichier <span class="identifier">page.php</span> ou <span class="identifier">layout.php</span>:</p>
+<pre><code><span class="keymethod">&lt;?php</span>
+<span class="keyword">if</span> (!<span class="method">user_is_logged_in</span>()) { <span class="comment">// Votre condition de redirection</span>
+    <span class="method">spa_redirect</span>(<span class="string">'/login'</span>); <span class="comment">// Rediriger vers la page de connexion</span>
+}</code></pre>
+</div>
+<div class="advanced-usage">
+    <p>La réponse du serveur ressemble à ceci (avec un statut <span class="number">302</span> et une url de redirection dans les en-têtes (header)) :</p>
+<pre><code>{
+    <span class="identifier">"content"</span> : <span class="string">"&lt;div class='spa-redirect'&gt;Redirection...&lt;/div&gt;"</span>,
+    <span class="identifier">"metadata"</span> : {
+        <span class="identifier">"title"</span> : <span class="string">"Redirection"</span>
+    }
+    <span class="identifier">"styles"</span> : [],
+}
+</code></pre>
+<p>L’url de redirection se trouve dans l’en-tête (header) avec la clé <span class="string">"X-SPA-Redirect"</span>. <br> Utilisez votre propre logique ou suivez les instructions ci-dessous. </p>
+</div>
+<strong>Utilisation de <span class="identifier">apiClient</span> :</strong>
 <div>Importez <span class="identifier">apiClient</span> depuis <span class="identifier">ocho-api.js</span> :</div>
 <pre><code><span class="keyword">import</span> { <span class="keymethod">apiClient</span> } <span class="keyword">from</span> <span class="string">"/app/js/ocho-api.js"</span>;</code></pre>
             <ul>
