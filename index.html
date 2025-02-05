@@ -231,6 +231,19 @@
 <span class="tag">&lt;<span class="tag-name">footer</span>&gt;</span><span class="comment">&lt;!-- Pied de page --&gt;</span><span class="tag">&lt;/<span class="tag-name">footer</span>&gt;</span></code></pre>
                 <ul>
                     <li>La variable  <span class="identifier">$pageContent</span> affiche le contenu des <span class="identifier">page.php</span>  du repertoire courant et des sous répertoires qui n'ont pas de <span class="identifier">layout.php</span> </li>
+                    <li><div>Le fichier de mise en page (layout) peut adopter un comportement de page en ajoutant le mot-clé <span class="identifier">"as page"</span> en haut du fichier, comme dans l'exemple ci-dessous :</div> 
+                        <pre><code><span class="keymethod">&lt;?php</span> 
+    <span class="string">"as page"</span>; <span class="comment">// Chaîne clé pour agir comme une page.</span>
+<span class="keymethod">?&gt;</span>
+&lt;<span class="tag-name">div</span> <span class="identifier">class</span>=<span class="string">"page"</span>&gt;
+<span class="keymethod">&lt;?php</span> 
+    <span class="keyword">echo</span> <span class="identifier">$pageContent</span>; <span class="comment">// Contenu de la page (facultatif)</span>
+<span class="keymethod">?&gt;</span>
+    <span class="tag">&lt;<span class="tag-name">h1</span>&gt;</span>Un layout avec un comportement de page<span class="tag">&lt;/<span class="tag-name">h1</span>&gt;</span>
+<span class="tag">&lt;/<span class="tag-name">div</span>&gt;</span>
+</code></pre>
+                      </li>
+                      
                 </ul>
             </li>
             <li>
