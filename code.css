@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+
 .content {
     text-align: initial;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
 
 .string {
     color: #a5d6ff;
@@ -21,6 +21,10 @@
     color: #6495ed;
 }
 
+[contenteditable]{
+    border: none;
+    outline: none;
+}
 
 pre {
     background: #151b23;
@@ -31,7 +35,7 @@ pre {
     min-height: max-content;
 }
 
-code {
+code, code * {
     font-family: "Fira Code", monospace, 'Courier New', Courier;
     white-space: pre-wrap;
     min-height: max-content;

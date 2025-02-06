@@ -438,7 +438,6 @@ function detectLanguage(code) {
 
     scores[lang] = score >= config.minScore ? score : 0;
   }
-console.log(scores);
 
   const detectedLanguage = Object.entries(scores)
     .filter(([_, score]) => score > 0)
@@ -463,6 +462,13 @@ function removeContext(code) {
 
 function highlightSyntax(carret = true) {
   const editor = document.getElementById("editor");
+  sessionStorage.setItem("editorContent", editor.innerText);
+  // Gestion de la touche Tab dans l'éditeur
+  editor.addEventListener("keydown", (e)=> {
+    if (e.key.toLowerCase() === "tab") {
+      e.preventDefault();
+    }
+  });
 
   const filenameInput = document.getElementById("filenameInput"); // Assuming filename input element is present
 
@@ -487,71 +493,66 @@ function highlightSyntax(carret = true) {
   }
 }
 highlightSyntax();
-
+// Sauvegarde la position du curseur en insérant directement le caractère zéro‑width
 function saveCaretPosition(editableDiv) {
   const selection = window.getSelection();
+  
   if (!selection.rangeCount) return null;
-
   const range = selection.getRangeAt(0);
-  const preCaretRange = range.cloneRange();
-  
-  // Créer un marqueur temporaire pour capturer la position exacte
-  const tempSpan = document.createElement('span');
-  tempSpan.textContent = '\u200B'; // Caractère zéro-width
-  range.insertNode(tempSpan);
-  
-  // Calculer l'offset avant le marqueur
-  preCaretRange.selectNodeContents(editableDiv);
-  preCaretRange.setEndBefore(tempSpan);
-  const offset = preCaretRange.toString().length;
 
-  // Nettoyer le marqueur
-  tempSpan.parentNode.removeChild(tempSpan);
+  // Insertion d'un nœud texte contenant le caractère zéro‑width
+  const markerNode = document.createTextNode("\u200B");
+  range.insertNode(markerNode);
+
+  // Calcul de l'offset : on récupère le texte complet et on cherche
+  // la position du premier \u200B. (On part du principe que l'utilisateur n'a pas saisi ce caractère.)
+  const fullText = editableDiv.innerText;
+  
+  const offset = fullText.indexOf("\u200B");
 
   return offset;
 }
 
-function restoreCaretPosition(editableDiv, offset) {
+// Restaure la position du curseur en ignorant les caractères zéro‑width
+function restoreCaretPosition(editableDiv, targetOffset) {
   const selection = window.getSelection();
   const range = document.createRange();
   let charCount = 0;
   let found = false;
 
+  // Parcours de tous les nœuds textuels de l'éditeur
   const walker = document.createTreeWalker(
     editableDiv,
     NodeFilter.SHOW_TEXT,
     null,
     false
   );
-
+  
   let currentNode;
   while ((currentNode = walker.nextNode()) && !found) {
-    const nodeText = currentNode.textContent;
-    const nodeLength = nodeText.length;
-    
-    if (charCount + nodeLength >= offset) {
-      const offsetInNode = offset - charCount;
-      let position = offsetInNode;
-
-      // Ajustement pour les \n
-      if (nodeText[offsetInNode] === '\n') {
-        position = offsetInNode + 1; // Place APRÈS le \n
-      } else if (nodeText[offsetInNode - 1] === '\n') {
-        position = offsetInNode; // Conserve position actuelle
+    const text = currentNode.textContent;
+    // Parcours caractère par caractère
+    for (let i = 0; i < text.length; i++) {
+      // Ignore les caractères zéro‑width
+      if (text[i] === "\u200B") continue;
+      if (charCount === targetOffset) {
+        // On a trouvé la position correspondant à l'offset sauvegardé
+        range.setStart(currentNode, i);
+        range.collapse(true);
+        found = true;
+        break;
       }
-
-      range.setStart(currentNode, Math.min(position, nodeLength));
-      range.collapse(true);
-      found = true;
+      charCount++;
     }
-    charCount += nodeLength;
   }
 
+  // Si on n'a pas trouvé (cas particulier), on place le curseur à la fin
   if (!found) {
     range.selectNodeContents(editableDiv);
     range.collapse(false);
   }
 
+  // Met à jour la sélection
   selection.removeAllRanges();
   selection.addRange(range);
 }

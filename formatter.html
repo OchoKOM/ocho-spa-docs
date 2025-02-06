@@ -5,19 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Formatter</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="code.css">
 </head>
 
-<body style="background: #0d1117;color: #f7f7f7;">
+<body>
     <h3>Code avec Highlight Syntaxique :</h3>
-    <div>
-        <label for="filenameInput">Nom du fichier :</label>
+    <label>
+        <div>Nom du fichier :</div>
         <input type="text" id="filenameInput" value="" placeholder="ex: script.js">
-    </div>
+    </label>
 
 
     <div><label for="inputCode">Code :</label></div>
-    <pre id="editor" contenteditable></pre>
+    <pre id="editor" contenteditable spellcheck="false" ></pre>
     <script src="formatter.js"></script>
 </body>
 
